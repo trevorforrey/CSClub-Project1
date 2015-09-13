@@ -40,7 +40,7 @@ public class GamePanel extends JPanel
 	/**addElements
 	* add components to panels and
 	* adds panels to Frame
-	* JoshuaBecker
+	* J.B.
 	**/
 	private void addElements()
 	{
@@ -51,7 +51,7 @@ public class GamePanel extends JPanel
 	/**createComponents
 	* creates components and gives them
 	* default values.
-	* JoshuaBecker
+	* J.B.
 	**/
 	private void createComponents()
 	{
@@ -63,7 +63,7 @@ public class GamePanel extends JPanel
 	* adds ActionListener, which wait till
 	* an action is Performed then sends 
 	* a event to the type of listener.
-	* JoshuaBecker
+	* J.B.
 	**/
 	private void addActionListeners()
 	{
@@ -73,7 +73,7 @@ public class GamePanel extends JPanel
 	/**Listeners
 	* Once an event occurs the program goes here
 	* and decides what to do with each event.
-	* JoshuaBecker
+	* J.B.
 	**/
 	private class ButtonListener implements ActionListener
 	{
