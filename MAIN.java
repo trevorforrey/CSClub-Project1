@@ -12,7 +12,7 @@ public class MAIN
  {
 	/**main
 	* create frame, create panel, display;
-	* JoshuaBecker
+	* J.B.
 	**/
 	public static void main(String[] args)
     {       
