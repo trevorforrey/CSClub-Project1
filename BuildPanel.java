@@ -2,7 +2,7 @@
 Name: Build Panel 
 Author: Joshua Becker
 Create On: 9/9/15
-Updated On: 9/10/15
+Updated On: 9/12/15
 Contributors:
  */
 import java.awt.event.*; 
@@ -14,11 +14,10 @@ import java.awt.*;
 
 public class BuildPanel extends JPanel 
 {
-    private JButton PlaceHolder1;
-	private JButton PlaceHolder2;
-	private JButton exit;
-	private JButton PlaceHolder3;
-    private JLabel label; 
+	private JButton exitToDesk, exitToMenu;
+	private JButton createGame, createNewSlide;
+	private JButton saveSlide, LoadSlide;
+	private JButton answer1B, answer2B, answer3B, answer4B;
 	private JComboBox<String> createdEvents;
 	private JFrame buildFrame;
 	private JPanel mainPanel;
@@ -28,6 +27,7 @@ public class BuildPanel extends JPanel
 	private JPanel answers;
 	private JTextField storyText;
 	private JTextField answer1Text, answer2Text, answer3Text, answer4Text;
+	private JTextField answer1Loc, answer2Loc, answer3Loc, answer4Loc;
 	private int SCREEN_WIDTH;
 	private int SCREEN_HEIGHT;
 	
@@ -35,7 +35,7 @@ public class BuildPanel extends JPanel
     {
 		buildFrame = incBuildFrame;
 		
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();// get screen size.
 		SCREEN_WIDTH = gd.getDisplayMode().getWidth();
 		SCREEN_HEIGHT = gd.getDisplayMode().getHeight();
 		
@@ -55,23 +55,34 @@ public class BuildPanel extends JPanel
 	/**addElements
 	* add components to panels and
 	* adds panels to Frame
-	* JoshuaBecker
+	* J.B.
 	**/
 	private void addElements()
 	{
 		body.add(storyText);
 		
-		headers.add(PlaceHolder3);
+		
+		headers.add(createGame);
+		headers.add(saveSlide);
+		headers.add(exitToDesk);
+		headers.add(exitToMenu);
 		
 		options.add(createdEvents);
-		options.add(PlaceHolder1);
-		options.add(PlaceHolder2);
-		options.add(exit);
+		options.add(createNewSlide);
+		options.add(LoadSlide);
 		
 		answers.add(answer1Text);
+		answers.add(answer1B);
+		answers.add(answer1Loc);
 		answers.add(answer2Text);
+		answers.add(answer2B);
+		answers.add(answer2Loc);
 		answers.add(answer3Text);
+		answers.add(answer3B);
+		answers.add(answer3Loc);
 		answers.add(answer4Text);
+		answers.add(answer4B);
+		answers.add(answer4Loc);
 		
 		buildFrame.add(body,BorderLayout.CENTER);
 		buildFrame.add(options, BorderLayout.WEST);
@@ -81,14 +92,14 @@ public class BuildPanel extends JPanel
 	
 	/**buildComponents
 	* set up components and there attributes.
-	* JoshuaBecker
+	* J.B.
 	**/
 	private void buildComponents()
 	{
 		options.setLayout(new BoxLayout(options, BoxLayout.Y_AXIS));
 		body.setLayout(new BoxLayout(body,BoxLayout.Y_AXIS));
 		headers.setLayout(new FlowLayout());
-		answers.setLayout(new BoxLayout(answers,BoxLayout.Y_AXIS));
+		answers.setLayout(new GridLayout(4, 2, 5, 5));
 		
 		body.setSize(SCREEN_WIDTH-500,SCREEN_HEIGHT-500);
 		answers.setPreferredSize(new Dimension(SCREEN_WIDTH/2, SCREEN_HEIGHT/6));
@@ -99,22 +110,32 @@ public class BuildPanel extends JPanel
 		answer2Text.setMaximumSize(new Dimension(SCREEN_WIDTH/3,SCREEN_HEIGHT/9));
 		answer3Text.setMaximumSize(new Dimension(SCREEN_WIDTH/3,SCREEN_HEIGHT/9));
 		answer4Text.setMaximumSize(new Dimension(SCREEN_WIDTH/3,SCREEN_HEIGHT/9));
+		
+		answer1B.setMaximumSize(new Dimension(SCREEN_WIDTH/3,SCREEN_HEIGHT/9));
+		answer2B.setMaximumSize(new Dimension(SCREEN_WIDTH/3,SCREEN_HEIGHT/9));
+		answer3B.setMaximumSize(new Dimension(SCREEN_WIDTH/3,SCREEN_HEIGHT/9));
+		answer4B.setMaximumSize(new Dimension(SCREEN_WIDTH/3,SCREEN_HEIGHT/9));
+		
+		answer1Loc.setEditable(false);
+		answer2Loc.setEditable(false);
+		answer3Loc.setEditable(false);
+		answer4Loc.setEditable(false);
 
 		createdEvents.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/35));
-		PlaceHolder1.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
-		PlaceHolder2.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
-		PlaceHolder3.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
+		createNewSlide.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
+		LoadSlide.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
+		createGame.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
 		
 	}
 	
 	/**createComponents
 	* creates components and gives them
 	* default values.
-	* JoshuaBecker
+	* J.B.
 	**/
 	private void createComponents()
 	{
-		String [] events = {"Slide Menu", "Good Bye"};
+		String [] events = {"Slide Menu", "Slide One", "Slide Three"};// need to load Slides here...
 		
 		mainPanel = new JPanel();
 		options = new JPanel();
@@ -128,39 +149,98 @@ public class BuildPanel extends JPanel
 		answer3Text = new JTextField("Place Holder...3");
 		answer4Text = new JTextField("Place Holder...4");
 		
+		answer1B = new JButton("Set Event Location For Answer One");
+		answer2B = new JButton("Set Event Location For Answer Two");
+		answer3B = new JButton("Set Event Location For Answer Three");
+		answer4B = new JButton("Set Event Location For Answer Four");
+		
+		answer1Loc = new JTextField("Current Loaction: ");
+		answer2Loc = new JTextField("Current Loaction:");
+		answer3Loc = new JTextField("Current Loaction:");
+		answer4Loc = new JTextField("Current Loaction:");
+		
+		createGame = new JButton("Create Game");
+		saveSlide = new JButton("Save Slide");
+		exitToDesk = new JButton("Exit To Desktop");
+		exitToMenu = new JButton("Exit To Menu");
+		
 		createdEvents = new JComboBox<String>(events);
-		PlaceHolder3 = new JButton("place Holder 3");
-		PlaceHolder2 = new JButton("place Holder 2");
-		PlaceHolder1 = new JButton("Place Holder 1");
-		exit = new JButton("Exit To Desktop");
+		LoadSlide = new JButton("Load Slide");
+		createNewSlide = new JButton("Create New Slide");
 	}
 	
 	/**addActionListeners
 	* adds ActionListener, which wait till
 	* an action is Performed then sends 
 	* a event to the type of listener.
-	* JoshuaBecker
+	* J.B.
 	**/
 	private void addActionListeners()
 	{
+		answer1B.addActionListener(new ButtonListener());
+		answer2B.addActionListener(new ButtonListener());
+		answer3B.addActionListener(new ButtonListener());
+		answer4B.addActionListener(new ButtonListener());
+		
+		createGame.addActionListener(new ButtonListener());
+		saveSlide.addActionListener(new ButtonListener());
+		exitToDesk.addActionListener(new ButtonListener());
+		exitToMenu.addActionListener(new ButtonListener());
+		
 		createdEvents.addActionListener(new ComboListener());
-		PlaceHolder3.addActionListener(new ButtonListener());
-		PlaceHolder2.addActionListener(new ButtonListener());
-		PlaceHolder1.addActionListener(new ButtonListener());
-		exit.addActionListener(new ButtonListener());
+		LoadSlide.addActionListener(new ButtonListener());
+		createNewSlide.addActionListener(new ButtonListener());
 	}
 
 	/**Listeners
 	* Once an event occurs the program goes here
 	* and decides what to do with each event.
-	* JoshuaBecker
+	* J.B.
 	**/
 	private class ButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
 			String command = event.getActionCommand();  
-			// actions of buttons...
+			if( command.equals( "Exit To Desktop"))
+			{
+				//Need to ask One More Time if exit...
+				System.exit(0);
+			}else if(command.equals( "Exit To Menu"))
+			{
+				//Need to ask One More Time if exit...
+				buildFrame.dispose();
+				JFrame menuFrame = new JFrame("'Name' Menu");
+				menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				
+				MenuPanel panel = new MenuPanel(menuFrame); 
+				menuFrame.pack();
+				menuFrame.setVisible(true);
+			}else if(command.equals( "Create New Slide"))
+			{
+				
+			}else if(command.equals( "Load Slide"))
+			{
+				
+			}else if(command.equals( "Save Slide"))
+			{
+				
+			}else if(command.equals( "Create Game"))
+			{
+				
+			}else if(command.equals( "Set Event Location For Answer One"))
+			{
+				
+			}else if(command.equals( "Set Event Location For Answer Two"))
+			{
+				
+			}else if(command.equals( "Set Event Location For Answer Three"))
+			{
+				
+			}else if(command.equals( "Set Event Location For Answer Four"))
+			{
+				
+			}
 		}  
 	}
 	private class ComboListener implements ActionListener
