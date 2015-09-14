@@ -16,7 +16,7 @@ public class MAIN
 	**/
 	public static void main(String[] args)
     {       
-	JFrame menuFrame = new JFrame("'Name' Menu");
+	JFrame menuFrame = new JFrame("Main Menu");
 	menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
     MenuPanel panel = new MenuPanel(menuFrame); 
