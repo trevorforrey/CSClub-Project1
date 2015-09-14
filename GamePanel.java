@@ -82,7 +82,10 @@ public class GamePanel extends JPanel
 			String command = event.getActionCommand();
 			if(command.equals( "Exit To Desktop"))
 			{
-				System.exit(0);
+				int result = JOptionPane.showConfirmDialog(gameFrame, "Are you sure you want to exit to desktop?");
+				if (result == JOptionPane.YES_OPTION){
+					System.exit(0);
+				}
 			}
 		}  
 	}

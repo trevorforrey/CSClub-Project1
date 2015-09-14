@@ -204,18 +204,22 @@ public class BuildPanel extends JPanel
 			String command = event.getActionCommand();  
 			if( command.equals( "Exit To Desktop"))
 			{
-				//Need to ask One More Time if exit...
-				System.exit(0);
+				int result = JOptionPane.showConfirmDialog(buildFrame, "Are you sure you want to exit to desktop?");
+				if (result == JOptionPane.YES_OPTION){
+					System.exit(0);
+				}
 			}else if(command.equals( "Exit To Menu"))
 			{
-				//Need to ask One More Time if exit...
-				buildFrame.dispose();
-				JFrame menuFrame = new JFrame("'Name' Menu");
-				menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				
-				MenuPanel panel = new MenuPanel(menuFrame); 
-				menuFrame.pack();
-				menuFrame.setVisible(true);
+				int result = JOptionPane.showConfirmDialog(buildFrame, "Are you sure you want to exit to Main Menu?");
+				if (result == JOptionPane.YES_OPTION){
+					buildFrame.dispose();
+					JFrame menuFrame = new JFrame("Main Menu");
+					menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					
+					MenuPanel panel = new MenuPanel(menuFrame); 
+					menuFrame.pack();
+					menuFrame.setVisible(true);
+				}
 			}else if(command.equals( "Create New Slide"))
 			{
 				
