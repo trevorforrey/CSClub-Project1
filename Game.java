@@ -8,7 +8,7 @@ Contributors:
 Description: Game class that holds all of the slide objects in order to organize them
 and to have the ability to save the game.
  */
-
+import java.util.*;
 public class Game{
 	private String name;
 	private List<Slide> gameSlides;
@@ -50,8 +50,8 @@ public class Game{
 
 	public int loadGame(String savePath){
 		int success = -1;
-		String gameName;
-		List<Slide> slideList;
+		String gameName = "";
+		List<Slide> slideList = new ArrayList<Slide>();
 		//Open save file
 		//Read all data
 		//Change success flag
