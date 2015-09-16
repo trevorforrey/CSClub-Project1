@@ -48,6 +48,7 @@ public class Game{
 		return success;
 	}
 
+	//Returns -1 if failure to load
 	public int loadGame(String savePath){
 		int success = -1;
 		String gameName = "";
@@ -60,14 +61,17 @@ public class Game{
 		return success;
 	}
 
+	//Add slide object to list of slides
 	public void addSlide(Slide slide){
 		gameSlides.add(slide);
 	}
 
+	//Remove first instance of slide from list of slides
 	public void removeSlide(Slide slide){
 		gameSlides.remove(slide);
 	}
 
+	//Returns number of slide objects in the list
 	public int getNumberOfSlides(){
 		return gameSlides.size();
 	}
