@@ -2,7 +2,7 @@
 Name: Build Panel 
 Author: Joshua Becker
 Create On: 9/9/15
-Updated On: 9/12/15
+Updated On: 9/17/15
 Contributors:
  */
 import java.awt.event.*; 
@@ -12,7 +12,7 @@ import java.io.*;
 import java.util.*; 
 import java.awt.*;
 
-public class BuildPanel extends JPanel 
+public class BuildPanel extends JPanel implements GUIInterface
 {
 	private JButton exitToDesk, exitToMenu;
 	private JButton createGame, createNewSlide;
@@ -57,7 +57,7 @@ public class BuildPanel extends JPanel
 	* adds panels to Frame
 	* J.B.
 	**/
-	private void addElements()
+	public void addElements()
 	{
 		body.add(storyText);
 		
@@ -94,7 +94,7 @@ public class BuildPanel extends JPanel
 	* set up components and there attributes.
 	* J.B.
 	**/
-	private void buildComponents()
+	public void buildComponents()
 	{
 		options.setLayout(new BoxLayout(options, BoxLayout.Y_AXIS));
 		body.setLayout(new BoxLayout(body,BoxLayout.Y_AXIS));
@@ -133,7 +133,7 @@ public class BuildPanel extends JPanel
 	* default values.
 	* J.B.
 	**/
-	private void createComponents()
+	public void createComponents()
 	{
 		String [] events = {"Slide Menu", "Slide One", "Slide Three"};// need to load Slides here...
 		

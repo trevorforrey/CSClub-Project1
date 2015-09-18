@@ -2,7 +2,7 @@
 Name: Menu Panel 
 Author: Joshua Becker
 Create On: 9/9/15
-Updated On: 9/10/15
+Updated On: 9/17/15
 Contributors:
  */
 
@@ -11,7 +11,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.JFrame;
 
-public class MenuPanel extends JPanel 
+public class MenuPanel extends JPanel implements GUIInterface
 {
     private JButton playGame;
 	private JButton buildGame;
@@ -34,6 +34,8 @@ public class MenuPanel extends JPanel
 		
 		createComponents();
 		
+		buildComponents();
+		
 		addActionListeners();
 		
 		addElements();
@@ -44,11 +46,20 @@ public class MenuPanel extends JPanel
 	* adds panels to Frame
 	* J.B.
 	**/
-	private void addElements()
+	public void addElements()
 	{
 		menuFrame.add(buildGame);
 		menuFrame.add(playGame);
 		menuFrame.add(exit);
+	}
+	
+	/**buildComponents
+	* set up components and there attributes.
+	* J.B.
+	**/
+	public void buildComponents()
+	{
+		// will need in the future...
 	}
 	
 	/**createComponents
@@ -56,7 +67,7 @@ public class MenuPanel extends JPanel
 	* default values.
 	* J.B.
 	**/
-	private void createComponents()
+	public void createComponents()
 	{
 		buildGame = new JButton("Build Game");
 		playGame = new JButton("Play Game");
