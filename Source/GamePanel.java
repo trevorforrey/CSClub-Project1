@@ -2,7 +2,7 @@
 Name: Game Panel 
 Author: Joshua Becker
 Create On: 9/9/15
-Updated On: 9/10/15
+Updated On: 9/17/15
 Contributors:
  */
 
@@ -11,7 +11,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.JFrame;
 
-public class GamePanel extends JPanel 
+public class GamePanel extends JPanel implements GUIInterface
 {
 	private JButton exit;
     private JLabel label; 
@@ -32,6 +32,8 @@ public class GamePanel extends JPanel
 		
 		createComponents();
 		
+		buildComponents();
+		
 		addActionListeners();
 		
 		addElements();
@@ -42,10 +44,19 @@ public class GamePanel extends JPanel
 	* adds panels to Frame
 	* J.B.
 	**/
-	private void addElements()
+	public void addElements()
 	{
 		gameFrame.add(label);
 		gameFrame.add(exit);
+	}
+
+	/**buildComponents
+	* set up components and there attributes.
+	* J.B.
+	**/
+	public void buildComponents()
+	{
+		// will need in the future...
 	}
 	
 	/**createComponents
@@ -53,7 +64,7 @@ public class GamePanel extends JPanel
 	* default values.
 	* J.B.
 	**/
-	private void createComponents()
+	public void createComponents()
 	{
 		label = new JLabel(" Work In Progress");
 		exit = new JButton("Exit To Desktop");
