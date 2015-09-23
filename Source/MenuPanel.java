@@ -2,7 +2,7 @@
 Name: Menu Panel 
 Author: Joshua Becker
 Create On: 9/9/15
-Updated On: 9/17/15
+Updated On: 9/19/15
 Contributors:
  */
 
@@ -10,27 +10,30 @@ import java.awt.*;
 import java.awt.event.*; 
 import javax.swing.*;
 import javax.swing.JFrame;
+import javax.imageio.*;
+import java.awt.image.*;
+import java.io.*;
 
 public class MenuPanel extends JPanel implements GUIInterface
 {
     private JButton playGame;
 	private JButton buildGame;
 	private JButton exit;
-    private JLabel label; 
+	private JButton help, about;
+	private JButton settings;
+	private JToolBar menuBar;
+    private JLabel labelBackround;
+	private JPanel buttonPanel, mainPanel;
 	private JFrame menuFrame;
+	private Image ImageOfBackround;
+	private BufferedImage menuBackround;
+	private ImageIcon menuIcon;
+	private int width;
+	private int height;
 	
     public MenuPanel(JFrame incMenuFrame)// constructer
     {
 		menuFrame = incMenuFrame;
-		
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();// geting size of screen
-		int width = gd.getDisplayMode().getWidth();
-		int height = gd.getDisplayMode().getHeight();
-		
-		menuFrame.setLayout(new FlowLayout());
-		menuFrame.setBackground(Color.lightGray);
-		menuFrame.setPreferredSize(new Dimension(width/2, height/2));
-		menuFrame.setLocation(width/4, height/4); // centering window
 		
 		createComponents();
 		
@@ -48,9 +51,18 @@ public class MenuPanel extends JPanel implements GUIInterface
 	**/
 	public void addElements()
 	{
-		menuFrame.add(buildGame);
-		menuFrame.add(playGame);
-		menuFrame.add(exit);
+		buttonPanel.add(buildGame);
+		buttonPanel.add(playGame);
+		buttonPanel.add(exit);
+		
+		menuBar.add(settings);
+		menuBar.add(help);
+		menuBar.add(about);
+		
+		mainPanel.add(menuBar, BorderLayout.PAGE_START);
+		mainPanel.add(buttonPanel, BorderLayout.CENTER);
+		
+		menuFrame.add(mainPanel);
 	}
 	
 	/**buildComponents
@@ -59,7 +71,50 @@ public class MenuPanel extends JPanel implements GUIInterface
 	**/
 	public void buildComponents()
 	{
-		// will need in the future...
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();// geting size of screen
+		width = gd.getDisplayMode().getWidth();
+		height = gd.getDisplayMode().getHeight();
+		
+		loadImg();
+		ImageOfBackround = menuBackround.getScaledInstance(width/2, height/2, Image.SCALE_SMOOTH);
+		menuIcon = new ImageIcon(ImageOfBackround);
+		menuFrame.setIconImage(ImageOfBackround);
+		
+	    buttonPanel.setLayout(new FlowLayout());
+		buttonPanel.setBackground(Color.black);
+		
+		menuBar.setFloatable(false);
+		menuBar.setPreferredSize(new Dimension(width/2,25));
+		menuBar.setBackground(Color.black);
+		menuBar.setBorder(null);
+		
+		mainPanel.setLayout(new BorderLayout(10,height/6));
+		mainPanel.setBackground(Color.black);
+		
+		menuFrame.setPreferredSize(new Dimension(width/2, height/2));
+		menuFrame.setLocation(width/4, height/4); // centering window
+		menuFrame.setResizable(false);
+	}
+	
+	/**loadImg
+	* loads image from file.
+	* J.B.
+	**/
+	private void loadImg()
+	{
+		String path = "";
+		try //loading image
+		{
+			path = System.getProperty("user.dir");
+			path = path.replace('\\','/');
+			path = path.replaceAll("Source", "/Assets/Backround/menuBackround.jpg");
+			
+			menuBackround = ImageIO.read(new File(path));
+		} catch (IOException e) 
+		{
+			System.out.println(path);
+			System.out.println("cant find image");
+		}
 	}
 	
 	/**createComponents
@@ -72,6 +127,14 @@ public class MenuPanel extends JPanel implements GUIInterface
 		buildGame = new JButton("Build Game");
 		playGame = new JButton("Play Game");
 		exit = new JButton("Exit To Desktop");
+		menuBar = new JToolBar("menu Tool Bar");
+		settings = new JButton("Settings");
+		help = new JButton("Help");
+		about = new JButton("About");
+		buttonPanel = new JPanel();
+		mainPanel = new JPanel();
+		menuBackround = null;		
+		
 	}
 
 	/**addActionListeners
@@ -82,23 +145,40 @@ public class MenuPanel extends JPanel implements GUIInterface
 	**/
 	private void addActionListeners()
 	{
-		buildGame.addActionListener(new ButtonListener());
+		buildGame.addActionListener(new ButtonListener(this));// in order to call menu with out haveing to create new object.
 		playGame.addActionListener(new ButtonListener());
 		exit.addActionListener(new ButtonListener());
+		help.addActionListener(new ButtonListener());
+		about.addActionListener(new ButtonListener());
+		settings.addActionListener(new ButtonListener());
+		
 	}
 
 	/**Listeners
 	* Once an event occurs the program goes here
 	* and decides what to do with each event.
+	*
+	*@peram MenuPanel.
+	*@peram nothing.
 	* J.B.
 	**/
 	private class ButtonListener implements ActionListener
 	{
+		private MenuPanel MainMenu;
+		ButtonListener(MenuPanel thisMenu)
+		{
+			MainMenu = thisMenu;
+		}
+		ButtonListener()
+		{
+			MainMenu = null;
+		}
 		public void actionPerformed(ActionEvent event)
 		{
 			String command = event.getActionCommand();
 			if( command.equals( "Play Game"))
 			{
+				// will need to have a load game popup or new window
 				menuFrame.dispose();
 				JFrame gameFrame = new JFrame("'Name' Game");
 				gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -109,20 +189,73 @@ public class MenuPanel extends JPanel implements GUIInterface
 				
 			}else if(command.equals( "Build Game"))
 			{
-				menuFrame.dispose();
-				JFrame buildFrame = new JFrame("'Name' Build");
+				JFrame buildFrame = new JFrame("Build");
 				buildFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
-				BuildPanel panel = new BuildPanel(buildFrame);
+				BuildPanel panel = new BuildPanel(buildFrame, MainMenu);
 				buildFrame.pack();
-				buildFrame.setVisible(true);
 			}else if(command.equals( "Exit To Desktop"))
 			{
 				int result = JOptionPane.showConfirmDialog(menuFrame, "Are you sure you want to exit to desktop?");
 				if (result == JOptionPane.YES_OPTION){
 					System.exit(0);
 				}
+			}else if(command.equals( "Help"))
+			{
+				getHelp();
+			}else if(command.equals( "About"))
+			{
+				getAbout();
+			}else if(command.equals( "Settings"))
+			{
+				JFrame settingsFrame = new JFrame("Settings");
+				settingsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				
+				settingsGUI panel = new settingsGUI(settingsFrame);
+				settingsFrame.pack();
+				settingsFrame.setVisible(true);
 			}
 		}  
+	}
+
+	/**GetHelp And GetAbout
+	* Creates new windows to dispay info
+	* J.B.
+	**/
+	public void setVisible(boolean sight)
+	{
+		menuFrame.setVisible(sight);
+	}
+	/**GetHelp And GetAbout
+	* Creates new windows to dispay info
+	* J.B.
+	**/
+	private void getHelp()
+	{
+		JFrame helpFrame = new JFrame("Help");
+		helpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		JPanel helpPanel = new JPanel();
+		
+		helpFrame.setPreferredSize(new Dimension(width/4,height/4));
+		helpFrame.setLocation(width/3,height/4);
+		
+		helpPanel.add(new JLabel("This is Where you will get Help..."));
+		helpFrame.add(helpPanel);
+		helpFrame.pack();
+		helpFrame.setVisible(true);
+	}
+	private void getAbout()
+	{
+		JFrame AboutFrame = new JFrame("About");
+		AboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		JPanel AboutPanel = new JPanel();
+		
+		AboutFrame.setPreferredSize(new Dimension(width/4,height/4));
+		AboutFrame.setLocation(width/3,height/4);
+		
+		AboutPanel.add(new JLabel("This is Where you will get Info..."));
+		AboutFrame.add(AboutPanel);
+		AboutFrame.pack();
+		AboutFrame.setVisible(true);
 	}
 }
