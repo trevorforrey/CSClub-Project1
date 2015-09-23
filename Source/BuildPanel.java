@@ -15,33 +15,28 @@ import java.awt.*;
 public class BuildPanel extends JPanel implements GUIInterface
 {
 	private JButton exitToDesk, exitToMenu;
-	private JButton createGame, createNewSlide;
-	private JButton saveSlide, LoadSlide;
+	private JButton createGame, createNewSlide, createNewBuild;
+	private JButton saveSlide, LoadSlide, backToMMenu;
 	private JButton answer1B, answer2B, answer3B, answer4B;
-	private JComboBox<String> createdEvents;
-	private JFrame buildFrame;
-	private JPanel mainPanel;
-	private JPanel options;
-	private JPanel body;
-	private JPanel headers;
-	private JPanel answers;
+	private JComboBox<String> createdEvents, createdGames;
+	private JFrame buildFrame, buildMenu;
+	private MenuPanel MainMenu;
+	private JPanel mainPanel, loadPanel;
+	private JPanel options, ButtonPanel;
+	private JPanel body, DropBoxPanel;
+	private JPanel headers, CreatePanel;
+	private JPanel answers, MenuPanel;
+	private JLabel Message;
 	private JTextField storyText;
 	private JTextField answer1Text, answer2Text, answer3Text, answer4Text;
 	private JTextField answer1Loc, answer2Loc, answer3Loc, answer4Loc;
 	private int SCREEN_WIDTH;
 	private int SCREEN_HEIGHT;
 	
-    public BuildPanel(JFrame incBuildFrame)// constructer
+    public BuildPanel(JFrame incBuildFrame, MenuPanel oldMMenu)// constructer
     {
+		MainMenu = oldMMenu;
 		buildFrame = incBuildFrame;
-		
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();// get screen size.
-		SCREEN_WIDTH = gd.getDisplayMode().getWidth();
-		SCREEN_HEIGHT = gd.getDisplayMode().getHeight();
-		
-		buildFrame.setLayout(new BorderLayout(10,10));
-		buildFrame.setBackground(Color.cyan);
-		buildFrame.setPreferredSize(new Dimension(SCREEN_WIDTH-5, SCREEN_HEIGHT-5));
 		
 		createComponents();
 		
@@ -50,6 +45,8 @@ public class BuildPanel extends JPanel implements GUIInterface
 		addActionListeners();
 		
 		addElements();
+		
+		addGameMenu();
 	}
 	
 	/**addElements
@@ -96,9 +93,22 @@ public class BuildPanel extends JPanel implements GUIInterface
 	**/
 	public void buildComponents()
 	{
+		MainMenu.setVisible(false);
+		
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();// get screen size.
+		SCREEN_WIDTH = gd.getDisplayMode().getWidth();
+		SCREEN_HEIGHT = gd.getDisplayMode().getHeight();
+		
+		buildFrame.setLayout(new BorderLayout(10,10));
+		buildFrame.setBackground(Color.cyan);
+		buildFrame.setPreferredSize(new Dimension(SCREEN_WIDTH-5, SCREEN_HEIGHT-5));
+		
 		options.setLayout(new BoxLayout(options, BoxLayout.Y_AXIS));
+		
 		body.setLayout(new BoxLayout(body,BoxLayout.Y_AXIS));
+		
 		headers.setLayout(new FlowLayout());
+		
 		answers.setLayout(new GridLayout(4, 2, 5, 5));
 		
 		body.setSize(SCREEN_WIDTH-500,SCREEN_HEIGHT-500);
@@ -126,6 +136,34 @@ public class BuildPanel extends JPanel implements GUIInterface
 		LoadSlide.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
 		createGame.setMaximumSize(new Dimension(SCREEN_WIDTH/10,SCREEN_HEIGHT/30));
 		
+		buildMenu.setResizable(false);
+		
+		buildMenu.setPreferredSize(new Dimension(SCREEN_WIDTH/2,SCREEN_HEIGHT/2));
+		buildMenu.setLayout(new FlowLayout());
+		buildMenu.setLocation(SCREEN_WIDTH/4,SCREEN_HEIGHT/4);
+		
+		Message.setLayout(new BoxLayout(Message, BoxLayout.Y_AXIS));
+		
+		MenuPanel.setLayout(new BoxLayout(MenuPanel, BoxLayout.Y_AXIS));
+		
+		loadPanel.setLayout(new BoxLayout(loadPanel, BoxLayout.Y_AXIS));
+		
+		DropBoxPanel.setMaximumSize(new Dimension(SCREEN_WIDTH/2,50));
+		ButtonPanel.setMaximumSize(new Dimension(SCREEN_WIDTH/2,50));
+		CreatePanel.setMaximumSize(new Dimension(SCREEN_WIDTH/2,50));
+		Message.setMaximumSize(new Dimension(SCREEN_WIDTH/2, 50));
+		backToMMenu.setMaximumSize(new Dimension(SCREEN_WIDTH/2, 50));
+		
+		DropBoxPanel.setMinimumSize(new Dimension(200,50));
+		ButtonPanel.setMinimumSize(new Dimension(200,50));
+		CreatePanel.setMinimumSize(new Dimension(200,50));
+		Message.setMinimumSize(new Dimension(200, 50));
+		backToMMenu.setMinimumSize(new Dimension(200, 50));
+		
+		buildMenu.setUndecorated(true);
+		buildMenu.getRootPane().setWindowDecorationStyle(JRootPane.FILE_CHOOSER_DIALOG );
+		buildMenu.setDefaultCloseOperation(buildMenu.DO_NOTHING_ON_CLOSE);
+		
 	}
 	
 	/**createComponents
@@ -136,6 +174,7 @@ public class BuildPanel extends JPanel implements GUIInterface
 	public void createComponents()
 	{
 		String [] events = {"Slide Menu", "Slide One", "Slide Three"};// need to load Slides here...
+		String [] Games = {"Game One", "Game Two", "Game Three"};// need to load saved game names here...
 		
 		mainPanel = new JPanel();
 		options = new JPanel();
@@ -167,6 +206,18 @@ public class BuildPanel extends JPanel implements GUIInterface
 		createdEvents = new JComboBox<String>(events);
 		LoadSlide = new JButton("Load Slide");
 		createNewSlide = new JButton("Create New Slide");
+		
+		createNewBuild = new JButton("Create New Game");
+		createdGames = new JComboBox<String>(Games);
+		backToMMenu = new JButton("Back To Main Menu");
+		Message = new JLabel("Load an Existing Game or Create a New One");
+		
+		loadPanel = new JPanel();
+		ButtonPanel = new JPanel(new FlowLayout());
+		DropBoxPanel = new JPanel(new FlowLayout());
+		CreatePanel = new JPanel(new FlowLayout());
+		MenuPanel = new JPanel();
+		buildMenu = new JFrame("Build Game Menu");
 	}
 	
 	/**addActionListeners
@@ -190,6 +241,40 @@ public class BuildPanel extends JPanel implements GUIInterface
 		createdEvents.addActionListener(new ComboListener());
 		LoadSlide.addActionListener(new ButtonListener());
 		createNewSlide.addActionListener(new ButtonListener());
+		
+		createdGames.addActionListener(new ComboListenerLoad());
+		createNewBuild.addActionListener(new ButtonListener());
+		backToMMenu.addActionListener(new ButtonListener());
+	}
+
+	/**addGameMenu
+	* gives users option to load game, or
+	* create new Game.
+	* J.B.
+	**/
+	private void addGameMenu()
+	{
+		buildFrame.setVisible(false);
+		
+		DropBoxPanel.add(new JLabel("Select from previously built Games "));
+		
+		DropBoxPanel.add(createdGames);
+		
+		DropBoxPanel.add(ButtonPanel);
+		
+		loadPanel.add(DropBoxPanel);
+		
+		CreatePanel.add(createNewBuild);
+		
+		CreatePanel.add(backToMMenu);
+		
+		MenuPanel.add(Message);
+		MenuPanel.add(loadPanel);
+		MenuPanel.add(CreatePanel);
+		buildMenu.add(MenuPanel);
+		
+		buildMenu.pack();
+		buildMenu.setVisible(true);
 	}
 
 	/**Listeners
@@ -213,12 +298,7 @@ public class BuildPanel extends JPanel implements GUIInterface
 				int result = JOptionPane.showConfirmDialog(buildFrame, "Are you sure you want to exit to Main Menu?");
 				if (result == JOptionPane.YES_OPTION){
 					buildFrame.dispose();
-					JFrame menuFrame = new JFrame("Main Menu");
-					menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					
-					MenuPanel panel = new MenuPanel(menuFrame); 
-					menuFrame.pack();
-					menuFrame.setVisible(true);
+					MainMenu.setVisible(true);
 				}
 			}else if(command.equals( "Create New Slide"))
 			{
@@ -244,7 +324,17 @@ public class BuildPanel extends JPanel implements GUIInterface
 			}else if(command.equals( "Set Event Location For Answer Four"))
 			{
 				
-			}
+			}else if(command.equals( "Create New Game"))
+			{
+				//create new Game Object.
+				//set Title.
+				buildMenu.dispose();
+				buildFrame.setVisible(true);
+			}else if(command.equals("Back To Main Menu"))
+			{
+				buildMenu.dispose();
+				MainMenu.setVisible(true);
+			};
 		}  
 	}
 	private class ComboListener implements ActionListener
@@ -252,6 +342,20 @@ public class BuildPanel extends JPanel implements GUIInterface
 		public void actionPerformed(ActionEvent event)
 		{
 			//label.setText("location: " + createdEvents.getSelectedIndex()); selected drop box item...
+		}
+	}
+	private class ComboListenerLoad implements ActionListener
+	{
+		public void actionPerformed(ActionEvent event)
+		{
+			int result = JOptionPane.showConfirmDialog(buildFrame, "Are you sure you want to Load " + createdGames.getSelectedItem() +"?");
+			if (result == JOptionPane.YES_OPTION)
+			{
+				// we need to load game selected Item here...
+				buildMenu.dispose();
+				buildFrame.setTitle("Editing: " + createdGames.getSelectedItem());
+				buildFrame.setVisible(true);
+			}
 		}
 	}
 }
