@@ -1,8 +1,8 @@
 /* 
-Name: Menu Panel 
+Name: Settings 
 Author: Joshua Becker
 Create On: 9/9/15
-Updated On: 9/17/15
+Updated On: 9/23/15
 Contributors:
  */
 
