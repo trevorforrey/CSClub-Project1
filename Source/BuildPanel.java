@@ -298,7 +298,7 @@ public class BuildPanel extends JPanel implements GUIInterface
 				int result = JOptionPane.showConfirmDialog(buildFrame, "Are you sure you want to exit to Main Menu?");
 				if (result == JOptionPane.YES_OPTION){
 					buildFrame.dispose();
-					MainMenu.setVisible(false);
+					MainMenu.setVisible(true);
 				}
 			}else if(command.equals( "Create New Slide"))
 			{
